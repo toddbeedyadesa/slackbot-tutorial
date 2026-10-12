@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6f5c">
+<title>Finance Tracker</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Finance Tracker</h1>
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="transactions" aria-selected="true">Transactions</button>
+    <button role="tab" data-tab="reports">Reports</button>
+    <button role="tab" data-tab="settings">Settings</button>
+  </nav>
+</header>
+
+<main>
+  <section id="tab-transactions" class="tab">
+    <form id="add-form" class="card form-grid" autocomplete="off">
+      <h2>Add transaction</h2>
+      <div class="kind-toggle" role="radiogroup" aria-label="Type">
+        <label><input type="radio" name="kind" value="expense" checked> Expense</label>
+        <label><input type="radio" name="kind" value="income"> Income</label>
+      </div>
+      <label>Date <input type="date" name="date" required></label>
+      <label>Amount <input type="text" name="amount" inputmode="decimal" placeholder="0.00" required></label>
+      <label class="wide">Description <input type="text" name="description" placeholder="e.g. Duke Energy bill"></label>
+      <label>Entity <select name="entity_id" data-picker="entity"></select></label>
+      <label>Category <select name="category_id" data-picker="category"></select></label>
+      <label class="check"><input type="checkbox" name="reimbursable"> Reimbursable</label>
+      <label class="reimb-from" hidden>Owed by <input type="text" name="reimburse_from" placeholder="Defaults to the entity"></label>
+      <label class="wide">Notes <input type="text" name="notes"></label>
+      <div class="wide actions"><button type="submit" class="primary">Add</button><span class="form-msg" aria-live="polite"></span></div>
+    </form>
+
+    <div class="card">
+      <div class="list-head">
+        <h2>Transactions</h2>
+        <div class="filters">
+          <input type="search" id="f-q" placeholder="Search">
+          <select id="f-entity" data-picker="entity-filter"></select>
+          <label class="check"><input type="checkbox" id="f-untagged"> Needs tagging</label>
+        </div>
+      </div>
+      <p class="summary" id="list-summary"></p>
+      <ul id="txn-list" class="txn-list"></ul>
+    </div>
+  </section>
+
+  <section id="tab-reports" class="tab" hidden>
+    <div class="card">
+      <div class="report-picker" id="report-picker"></div>
+      <div class="filters report-filters">
+        <select id="r-scope" aria-label="Scope"></select>
+        <select id="r-range" aria-label="Date range">
+          <option value="all">All time</option>
+          <option value="month">This month</option>
+          <option value="3m">Last 3 months</option>
+          <option value="12m">Last 12 months</option>
+          <option value="ytd">Year to date</option>
+          <option value="custom">Custom…</option>
+        </select>
+        <span id="r-custom" hidden>
+          <input type="date" id="r-start" aria-label="Start"> – <input type="date" id="r-end" aria-label="End">
+        </span>
+      </div>
+      <h2 id="report-title"></h2>
+      <p class="muted" id="report-desc"></p>
+      <div class="table-wrap"><table id="report-table" class="report"></table></div>
+    </div>
+  </section>
+
+  <section id="tab-settings" class="tab" hidden>
+    <div class="card">
+      <h2>Entities</h2>
+      <ul id="entity-list" class="settings-list"></ul>
+      <form id="add-entity" class="inline-form">
+        <input name="name" placeholder="New entity name" required>
+        <select name="type" data-picker="entity-type"></select>
+        <button type="submit">Add entity</button>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Categories</h2>
+      <div id="category-tree"></div>
+      <form id="add-group" class="inline-form">
+        <input name="name" placeholder="New parent group" required>
+        <button type="submit">Add group</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
